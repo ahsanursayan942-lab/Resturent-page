@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'ÉCLIPSE | Grand Gastronomy</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=Inter:wght@200;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* 1. ARCHITECTURAL DESIGN SYSTEM */
+        :root {
+            --gold: #c5a059;
+            --bg: #050505;
+            --surface: #0f0f0f;
+            --text: #ffffff;
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Inter', sans-serif;
+            --transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: var(--font-sans); 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 2. THE CINEMA HERO */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-video-alt {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.4), var(--bg)),
+                        url('https://images.pexels.com/photos/1581384/pexels-photo-1581384.jpeg?auto=compress&cs=tinysrgb&w=1920');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            animation: slowZoom 20s infinite alternate linear;
+        }
+
+        @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.15); } }
+
+        .hero-text { text-align: center; z-index: 10; }
+        .hero-text h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(4rem, 15vw, 10rem);
+            font-weight: 300;
+            line-height: 0.9;
+            font-style: italic;
+        }
+
+        /* 3. SCROLL-SNAP GALLERY (GOD-TIER CSS) */
+        .gallery-container {
+            padding: 100px 0;
+            background: #000;
+        }
+        .section-tag {
+            text-align: center;
+            color: var(--gold);
+            letter-spacing: 10px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+        }
+
+        .horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 20px;
+            padding: 0 10%;
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        .horizontal-scroll::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+
+        .gallery-item {
+            flex: 0 0 80vw;
+            height: 60vh;
+            scroll-snap-align: center;
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        @media (min-width: 1024px) { .gallery-item { flex: 0 0 40vw; } }
+
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+        .gallery-item:hover img { transform: scale(1.1); }
+        
+        .gallery-item .label {
+            position: absolute; bottom: 30px; left: 30px;
+            font-family: var(--font-serif); font-size: 2rem;
+            background: rgba(0,0,0,0.5); padding: 10px 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* 4. THE BENTO SIGNATURE MENU */
+        .bento-menu {
+            padding: 100px 8%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 350px);
+            gap: 20px;
+        }
+
+        .bento-item {
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+        
+        .bento-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.5s; }
+        .bento-item:hover img { opacity: 1; transform: scale(1.05); }
+
+        .bento-item.large { grid-column: span 2; grid-row: span 2; }
+        .bento-item.wide { grid-column: span 2; }
+
+        .bento-text {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            padding: 40px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+        .bento-text h3 { font-family: var(--font-serif); font-size: 1.8rem; margin-bottom: 5px; }
+        .bento-text p { color: var(--gold); font-size: 0.8rem; letter-spacing: 2px; }
+
+        /* 5. THE RESERVATION SUITE */
+        .reserve-section {
+            padding: 150px 8%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            background: #080808;
+        }
+
+        .reserve-form {
+            background: #000;
+            padding: 60px;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 40px;
+        }
+
+        .input-group { margin-bottom: 30px; }
+        .input-group label { display: block; font-size: 0.6rem; letter-spacing: 3px; color: var(--gold); margin-bottom: 10px; }
+        .input-group input, .input-group select {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid #333;
+            color: #fff; padding: 15px 0; font-family: var(--font-sans); outline: none;
+            transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--gold); }
+
+        .book-btn {
+            width: 100%; padding: 25px; background: var(--gold);
+            color: #000; border: none; font-weight: 800; letter-spacing: 4px;
+            text-transform: uppercase; border-radius: 10px; cursor: pointer;
+            transition: var(--transition);
+        }
+        .book-btn:hover { background: #fff; }
+
+        /* 6. RESPONSIVE FIXES */
+        @media (max-width: 1024px) {
+            .bento-menu { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .bento-item.large, .bento-item.wide { grid-column: span 1; height: 400px; }
+            .reserve-section { grid-template-columns: 1fr; }
+            .reserve-img { display: none; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="hero-video-alt"></div>
+        <nav style="position: absolute; top: 0; width: 100%; padding: 40px 8%; display: flex; justify-content: space-between; z-index: 100;">
+            <div style="font-family: var(--font-serif); font-size: 1.5rem; letter-spacing: 5px;">L'ÉCLIPSE</div>
+            <a href="#reserve" style="text-decoration: none; color: var(--gold); font-size: 0.7rem; font-weight: 800; letter-spacing: 3px; border: 1px solid var(--gold); padding: 10px 25px; border-radius: 50px;">BOOK A TABLE</a>
+        </nav>
+        <div class="hero-text">
+            <h1 style="margin-bottom: 10px;">The Soul of</h1>
+            <h1 style="color: var(--gold);">Modern Paris.</h1>
+        </div>
+    </header>
+
+    <!-- HORIZONTAL ATMOSPHERE GALLERY -->
+    <section class="gallery-container">
+        <div class="section-tag">Explore the Atmosphere</div>
+        <div class="horizontal-scroll">
+            <div class="gallery-item">
+                <img src="https://images.pexels.com/photos/1449773/pexels-photo-1449773.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
+                <div class="label">The Main Hall</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.pexels.com/photos/1055058/pexels-photo-1055058.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
+                <div class="label">Private Cellar</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
+                <div class="label">Chef's Table</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.pexels.com/photos/941861/pexels-photo-941861.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
+                <div class="label">Outdoor Lounge</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHOTO-BENTO MENU -->
+    <section class="bento-menu">
+        <div class="bento-item large">
+            <img src="https://images.pexels.com/photos/5638527/pexels-photo-5638527.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
+            <div class="bento-text">
+                <p>SIGNATURE STARTER</p>
+                <h3>Wild Hokkaido Scallops</h3>
+            </div>
+        </div>
+        <div class="bento-item">
+            <img src="https://images.pexels.com/photos/675951/pexels-photo-675951.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
+            <div class="bento-text">
+                <p>MAIN COURSE</p>
+                <h3>Dry-Aged Wagyu</h3>
+            </div>
+        </div>
+        <div class="bento-item">
+            <img src="https://images.pexels.com/photos/1126359/pexels-photo-1126359.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
+            <div class="bento-text">
+                <p>SWEET FINISH</p>
+                <h3>The Eclipse Soufflé</h3>
+            </div>
+        </div>
+        <div class="bento-item wide">
+ <img src="https://images.pexels.com/photos/290316/pexels-photo-290316.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Wine Cellar">
+            <div class="bento-text">
+                <p>FROM THE CELLAR</p>
+                <h3>Vintage 1994 Collection</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- FULL RESERVATION SECTION -->
+    <section class="reserve-section" id="reserve">
+        <div class="reserve-img">
+            <img src="https://images.pexels.com/photos/2290753/pexels-photo-2290753.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" style="width: 100%; border-radius: 40px; border: 1px solid var(--gold);">
+        </div>
+        <div class="reserve-form">
+            <div class="section-tag" style="text-align: left; margin-bottom: 20px;">Reservations</div>
+            <h2 style="font-family: var(--font-serif); font-size: 3rem; margin-bottom: 40px;">Secure Your Table.</h2>
+            
+            <form action="#">
+                <div class="input-group">
+                    <label>YOUR NAME</label>
+                    <input type="text" placeholder="Johnathan Smith" required>
+                </div>
+                <div class="input-group">
+                    <label>NUMBER OF GUESTS</label>
+                    <select>
+                        <option>2 Persons</option>
+                        <option>4 Persons</option>
+                        <option>Private Dining (6+)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>DESIRED DATE</label>
+                    <input type="date" required>
+                </div>
+                <button type="submit" class="book-btn">Request Availability</button>
+            </form>
+            
+            <p style="margin-top: 30px; color: #444; font-size: 0.7rem; line-height: 1.8;">
+                *All reservations are subject to a 24-hour confirmation window. Our dress code is strictly Black Tie / Business Formal.
+            </p>
+        </div>
+    </section>
+
+    <footer style="padding: 100px 8%; background: #000; text-align: center; border-top: 1px solid #111;">
+        <div style="font-family: var(--font-serif); font-size: 2rem; letter-spacing: 5px; margin-bottom: 20px;">L'ÉCLIPSE</div>
+        <p style="color: #444; font-size: 0.8rem; letter-spacing: 2px;">PARIS // TOKYO // NEW YORK</p>
+        <div style="margin-top: 50px; opacity: 0.3; font-size: 0.6rem;">© 2024 GASTRONOMY LABS. ALL RIGHTS RESERVED.</div>
+    </footer>
+
+</body>
+</html>
